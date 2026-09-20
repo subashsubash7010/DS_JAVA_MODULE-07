@@ -1,115 +1,107 @@
-# Flattening a Nested List Using an Iterator
+# Ex6 Right Rotation LinkedList
 ## AIM:
-To design and implement a class NestedIterator that flattens a nested list of integers such that all integers can be accessed sequentially using an iterator interface (next() and hasNext()).
+To write a Java  program to:
+Create a singly linked list.
+Rotate the linked list to the right by k positions.
+Display the rotated linked list.
 ## Algorithm
-1.Start the program.
+1. Read n values to build the linked list and read k.
+2. Find the length of the list and reach the last node.
+3. Make the list circular by connecting last node to head.
+4. Move length − (k % length) steps to find new tail.
+5. Break the circle and print the list from the new head.
+   
 
-2.Define an interface-like class NestedInteger that can represent either a single integer or a nested list.
-
-3.Use a stack or recursion to flatten all integers from the nested list into a single list.
-
-4.Store the flattened list and maintain an index to track the current element.
-
-5.Implement next() to return the next integer and hasNext() to check if more integers exist.
-
-6.Test the iterator with a sample nested list.
-
-7.Stop the program.
 ## Program:
 ```java
 /*
-Program to find Flattening a Nested List Using an Iterator
+Program to  Right Rotation LinkedList
 Developed by: Subash M
 RegisterNumber: 212224220109
+
 */
 
-import java.util.*;
+import java.util.Scanner;
 
-interface NestedInteger {
-    boolean isInteger();
-    Integer getInteger();
-    List<NestedInteger> getList();
-}
-
-class NI implements NestedInteger {
-    private Integer value;
-    private List<NestedInteger> list;
-
-    NI(Integer value) {
-        this.value = value;
-        this.list = null;
-    }
-
-    NI(List<NestedInteger> list) {
-        this.list = list;
-        this.value = null;
-    }
-
-    public boolean isInteger() {
-        return value != null;
-    }
-
-    public Integer getInteger() {
-        return value;
-    }
-
-    public List<NestedInteger> getList() {
-        return list;
+class Node {
+    int data;
+    Node next;
+    Node(int data) {
+        this.data = data;
+        this.next = null;
     }
 }
 
-class NestedIterator implements Iterator<Integer> {
-    private List<Integer> flattenedList = new ArrayList<>();
-    private int index = 0;
+class prog {
+    public static Node rotateRight(Node head, int k) {
+        if (head == null || head.next == null || k == 0)
+            return head;
 
-    public NestedIterator(List<NestedInteger> nestedList) {
-        flatten(nestedList);
+        Node temp = head;
+        int length = 1;
+        while (temp.next != null) {
+            temp = temp.next;
+            length++;
+        }
+
+        temp.next = head;
+
+        int stepsToNewHead = length - k % length;
+        Node newTail = head;
+        for (int i = 1; i < stepsToNewHead; i++) {
+            newTail = newTail.next;
+        }
+
+        Node newHead = newTail.next;
+
+        newTail.next = null;
+
+        return newHead;
     }
 
-    private void flatten(List<NestedInteger> nestedList) {
-        for (NestedInteger ni : nestedList) {
-            if (ni.isInteger()) {
-                flattenedList.add(ni.getInteger());
-            } else {
-                flatten(ni.getList());
-            }
+    public static void printList(Node head) {
+        Node temp = head;
+        while (temp != null) {
+            System.out.print(temp.data + " ");
+            temp = temp.next;
         }
     }
 
-    public Integer next() {
-        return flattenedList.get(index++);
-    }
-
-    public boolean hasNext() {
-        return index < flattenedList.size();
-    }
-}
-
-public class FlattenNestedList {
     public static void main(String[] args) {
-        List<NestedInteger> nestedList = new ArrayList<>();
-        nestedList.add(new NI(1));
-        List<NestedInteger> innerList = new ArrayList<>();
-        innerList.add(new NI(2));
-        innerList.add(new NI(3));
-        nestedList.add(new NI(innerList));
-        nestedList.add(new NI(4));
+        Scanner sc = new Scanner(System.in);
 
-        NestedIterator i = new NestedIterator(nestedList);
-        System.out.print("Flattened list: ");
-        while (i.hasNext()) {
-            System.out.print(i.next() + " ");
+        int n = sc.nextInt();
+
+        if (n <= 0) {
+            sc.close();
+            return;
         }
+
+        Node head = new Node(sc.nextInt());
+        Node tail = head;
+        for (int i = 1; i < n; i++) {
+            tail.next = new Node(sc.nextInt());
+            tail = tail.next;
+        }
+
+        int k = sc.nextInt();
+
+        head = rotateRight(head, k);
+
+        System.out.print("LinkedList: ");
+        printList(head);
+
+        sc.close();
     }
-} 
+}
+ 
 
 ```
 
 ## Output:
 
-<img width="594" height="90" alt="514429842-2ed02c84-5ea3-4a30-bd22-198ca361f5b2" src="https://github.com/user-attachments/assets/d1664638-b3c3-4f2a-99dd-eef7663175c4" />
-
+<img width="882" height="256" alt="image" src="https://github.com/user-attachments/assets/6cc3aaf3-9af8-4331-a8fb-dc3d80997ee9" />
 
 
 ## Result:
-The NestedIterator class successfully flattens a nested list of integers into a single list and provides sequential access using standard iterator methods.
+Thus, the C program to perfom right rotation on linked list is implemented successfully.
