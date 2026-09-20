@@ -1,94 +1,84 @@
-# Ex8 Detection of Cycle and Finding the Starting Node in a Linked List
+# Ex9 Finding the Longest Length of Nested Set in a Permutation Array
 ## AIM:
-To write a program that detects a cycle in a linked list and returns the node where the cycle begins.
-If there is no cycle, the program should return null without modifying the linked list.
+To write a program that finds the length of the longest set s[k] defined as s[k] = { nums[k], nums[nums[k]], nums[nums[nums[k]]], … },where the iteration stops before a duplicate element occurs.
+
+The task is to return the maximum size among all such sets.
 ## Algorithm
-1.Start slow = head and fast = head.
+1.Create a visited array to mark elements already used in any set.
 
-2.Move slow by 1 step and fast by 2 steps until they meet or fast becomes null.
+2.For each index k, if it is not visited, start building the set S[k].
 
-3.If fast becomes null, return null (no cycle).
+3.Keep moving to nums[current], marking each element as visited.
 
-4.Move slow to head, keep fast at meeting point.
+4.Count each step until you reach a visited element (duplicate).
 
-5.Move both one step at a time until they meet — this node is the cycle start.
-
+5.Update the maximum count found so far and return it.  
 
 ## Program:
 ```java
- /*
-program that detects a cycle in a linked list and returns the node where the cycle begins.
-If there is no cycle, the program should return null without modifying the linked list.
+/*
+program that removes all nodes from a linked list whose value matches a given integer (val) and returns the new head of the modified linked list.
 Developed by: Subash M
 RegisterNumber: 212224220109
 
 */
-class DetectCycle 
+import java.util.Scanner;
 
-    static class Node {
-        int data;
-        Node next;
+class LongestSet {
 
-        Node(int data) {
-            this.data = data;
-            this.next = null;
-        }
-    }
+    public static int longestSetLength(int[] nums) {
+        boolean[] visited = new boolean[nums.length];
+        int maxLength = 0;
 
-    static Node detectCycle(Node head) {
-        if (head == null || head.next == null) 
-            return null;
+        for (int i = 0; i < nums.length; i++) {
+            if (!visited[i]) {
+                int count = 0;
+                int current = i;
 
-        Node slow = head;
-        Node fast = head;
+                while (!visited[current]) {
+                    visited[current] = true;
+                    current = nums[current];
+                    count++;
+                }
 
-        while (fast != null && fast.next != null) {
-            slow = slow.next;          
-            fast = fast.next.next;     
-
-            if (slow == fast) {        
-                break;
+                maxLength = Math.max(maxLength, count);
             }
         }
 
-        if (fast == null || fast.next == null)
-            return null;
-
-        slow = head;
-        while (slow != fast) {
-            slow = slow.next;
-            fast = fast.next;
-        }
-
-        return slow;   
+        return maxLength;
     }
 
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
 
-        Node head = new Node(1);
-        head.next = new Node(2);
-        head.next.next = new Node(3);
-        head.next.next.next = new Node(4);
-        head.next.next.next.next = new Node(5);
+        System.out.print("Enter the array size: ");
+        int n = sc.nextInt();
 
-        head.next.next.next.next.next = head.next.next;
+        int[] nums = new int[n];
 
-        Node cycleStart = detectCycle(head);
+      
+        System.out.println("Enter " + n + " elements:");
+        for (int i = 0; i < n; i++) {
+            nums[i] = sc.nextInt();
+        }
 
-        if (cycleStart != null)
-            System.out.println("Cycle starts at node: " + cycleStart.data);
-        else
-            System.out.println("No cycle detected.");
+        int result = longestSetLength(nums);
+        System.out.println("Maximum size of S[k] = " + result);
+
+        sc.close();
     }
 }
-  
+
+   
+
 
 ```
 
 ## Output:
 
-<img width="798" height="175" alt="514427923-9d8d99fc-0ab8-4708-8517-3b5c6a2663a6" src="https://github.com/user-attachments/assets/9cf07013-1fb6-4b49-94e4-8696175c6272" />
+
+<img width="435" height="89" alt="514428739-4eacad87-879a-439c-8de7-a72bb850f9c1" src="https://github.com/user-attachments/assets/37b9b1d0-0088-4984-a29c-6a4b13bee701" />
+
 
 ## Result:
-The program successfully detects whether a cycle exists in the linked list.
-If a cycle is present, it correctly identifies and returns the node where the cycle begins.
+The program successfully computes the longest length of the nested set s[k] for the given permutation array.
